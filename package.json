@@ -1,0 +1,17 @@
+{
+  "name": "engineer-skill",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "An opinionated engineering workflow with structured ownership and explicit evidence.",
+  "license": "MIT",
+  "keywords": ["pi-package", "agent-skill", "engineering"],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "pi": {
+    "extensions": ["./extensions/eng-mode.ts"],
+    "skills": ["./eng-mode"],
+    "prompts": ["./prompts"]
+  }
+}
