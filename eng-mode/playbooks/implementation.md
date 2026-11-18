@@ -1,15 +1,10 @@
 # Implementation
 
-Use this path for a new capability, integration, document, or skill.
+State: Build. Node: `Implement and clean`.
 
-1. Inspect existing conventions, callers, and checks.
-2. Define observable acceptance checks, including relevant failure and boundary cases.
-3. Name the data shapes, state transitions, interfaces, and migration needs before implementation.
-4. Choose the smallest design that satisfies the goal. Resolve consequential uncertainty with a focused prototype.
-5. Divide the work into units that each end in a check. Delegate independent units only after boundaries are stable.
-6. Implement and verify each unit. Integrate worker output as the owner.
-7. Remove temporary code, obsolete paths, and unnecessary abstractions. Preserve unrelated work.
-8. Exercise the actual deliverable. Run the affected project checks and inspect the final diff.
-9. Apply the entry skill's evidence decision.
-
-For documentation, verify instructions, paths, examples, and claims against the real artifact. For a skill, check discovery and invocation, then exercise representative tasks. Text validation alone does not prove agent behavior.
+1. Follow the surrounding conventions, callers, and checks. Read [coding](../skills/coding.md).
+2. For a bug, keep a regression check that already failed on the unchanged artifact. If that check is not in the suite yet, add it without changing the recorded failure. Change the code so the check passes. Do not weaken the check.
+3. Build one unit at a time. Check that unit before you build on it.
+4. For a structural change that must keep its behavior, capture the baseline before you restructure. Read [refactoring](../skills/refactoring.md).
+5. Delegate an independent unit only when the host has workers and the boundary is stable. Read [delegation](../skills/delegation.md). You integrate the worker's output.
+6. For an answer-only task, write the answer and its evidence. Do not edit source. For a review-only task, do not edit anything.

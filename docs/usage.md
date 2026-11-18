@@ -17,7 +17,7 @@ This method does not need native skill discovery, a slash command, a package man
 
 ## Install for native discovery
 
-Copy the entire `eng-mode/` directory into your host's supported skill directory. Keep the playbooks, references, and template with `SKILL.md`.
+Copy the entire `eng-mode/` directory into your host's supported skill directory. Keep the playbooks, skills, and template with `SKILL.md`.
 
 Alternatively, use the [Skills installer](https://github.com/vercel-labs/skills) from the target project, not this source repository:
 
@@ -33,21 +33,7 @@ For Pi's optional `/eng-mode` shortcut, use [the Pi adapter guide](pi.md).
 
 ## Control the scope
 
-Supply the desired result, constraints, and authorized endpoint. Let the agent choose the playbook and tools.
-
-To request the workflow for the session, tell the agent:
-
-```text
-Read the eng-mode skill and keep engineering mode active for this session.
-```
-
-Then supply the task. To disable the workflow, say:
-
-```text
-Turn engineering mode off.
-```
-
-Session persistence depends on the host and model. Repeat the invocation after a context reset if the host does not retain it.
+Supply the desired result, constraints, and authorized endpoint. The coordination playbook chooses the playbooks and skills. Each invocation walks one task through the flowchart and ends at a terminal node. Invoke `/eng-mode` again for the next task. Send `off` alone to stop without entering the flowchart.
 
 ## Work within the host's capabilities
 

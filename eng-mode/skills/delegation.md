@@ -1,6 +1,8 @@
-# Delegate without transferring responsibility
+# Delegation
 
-Delegate only when a bounded task has a clear deliverable and can proceed independently. Do not delegate an unresolved interface decision as parallel implementation.
+State: Build.
+
+Delegation does not transfer responsibility. Delegate only when a bounded task has a clear deliverable and can proceed independently. Do not delegate an unresolved interface decision as parallel implementation.
 
 ## Prepare a worker contract
 

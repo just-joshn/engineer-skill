@@ -10,11 +10,16 @@ Use a task-specific working file for multi-step work. Replace the placeholders. 
 - Authorized endpoint:
 - Assumptions that need confirmation:
 
+## Flowchart position
+
+- Current node:
+- Transitions taken so far:
+
 ## Method and ownership
 
-- Primary playbook:
+- Playbooks chosen at `Choose playbook; investigate and design`:
 - Overall owner:
-- Relevant principles and the decisions they changed:
+- Skills read:
 - Units, dependencies, and checks:
 - Delegated contracts and allowed outputs:
 
@@ -27,8 +32,9 @@ Use a task-specific working file for multi-step work. Replace the placeholders. 
 ## Decisions and remaining work
 
 - Current artifact and revision:
-- Outcome: verified, blocked, or inconclusive.
-- Correctable failures and the next experiment:
+- `Evidence` transition: `Correctable failure`, `Verified`, or `Blocked or inconclusive`.
+- `Authorized endpoint` transition: `Handoff` or `Merge`.
+- Correctable failures and the next attempt:
 - Unavailable checks and why:
-- Endpoint actually reached:
+- Terminal node reached:
 - Remaining work and owner:

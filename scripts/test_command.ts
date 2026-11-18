@@ -7,7 +7,7 @@ test("preserves multiline requests, quotes, spacing, and trailing content", () =
 	assert.equal(rewriteEngMode("/eng-mode" + request), "/skill:eng-mode " + request);
 });
 
-test("supports activation, off, and a newline after the command", () => {
+test("preserves off, a bare command, and a newline or tab after the command", () => {
 	for (const suffix of ["", " off", "\nInvestigate the failure", "\tFix it"]) {
 		assert.equal(rewriteEngMode("/eng-mode" + suffix), "/skill:eng-mode " + suffix);
 	}

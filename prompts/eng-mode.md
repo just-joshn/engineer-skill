@@ -1,5 +1,5 @@
 ---
-description: Own an engineering task from goal through verification and authorized delivery
+description: Walk a task through the six-state engineering flowchart
 argument-hint: "[goal and constraints]"
 ---
 The eng-mode input adapter is unavailable. Do not act on this command's arguments because prompt-template expansion can lose whitespace and quotes.
