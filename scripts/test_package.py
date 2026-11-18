@@ -55,6 +55,8 @@ STATES = {
         ["monitoring", "issue triage", "documenting limits", "remaining-work reporting"]),
 }
 
+NODES = {label for source, _, target in FLOWCHART for label in (source, target)}
+
 
 def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
@@ -74,6 +76,22 @@ def parse_metadata(text):
             raise ValueError("Use double-quoted string values in skill frontmatter")
         fields[key] = value
     return fields
+
+
+def node_sections():
+    body = SKILL_TEXT.split("## Nodes\n", 1)[1].split("\n## ", 1)[0]
+    sections = {}
+    for part in re.split(r"(?m)^### ", body)[1:]:
+        title, _, rest = part.partition("\n")
+        sections[title] = rest
+    return sections
+
+
+def declared_playbook(text):
+    match = re.search(r"(?m)^State: (\w+)\. Nodes?: (.+)$", text)
+    if match is None:
+        raise AssertionError("A playbook must name its state and node")
+    return match[1], re.findall(r"`([^`]+)`", match[2])
 
 
 class PackageTests(unittest.TestCase):
@@ -118,7 +136,7 @@ class PackageTests(unittest.TestCase):
         for document in SKILL.rglob("*.md"):
             text = document.read_text()
             with self.subTest(document=document.relative_to(SKILL)):
-                self.assertNotRegex(text, r"\b(?:pi_spawn|tmux_run|ExtensionAPI)\b|@earendil-works/|/skill:")
+                self.assertNotRegex(text, r"\b(?:pi_spawn|tmux_run|ExtensionAPI|TODO\.md|poteto|pstack)\b|/skill:")
                 for target in re.findall(r"\[[^\]]+\]\(([^\s)]+)\)", text):
                     url = urlsplit(target)
                     if not url.scheme and not url.netloc:
@@ -154,12 +172,14 @@ class PackageTests(unittest.TestCase):
                              for item in cell.split("; ")]
                     self.assertEqual([name for name, _ in links], expected)
                     for name, path in links:
-                        if path != "SKILL.md":
-                            self.assertEqual(path, f"{folder}/{slug(name)}.md")
-                            text = (SKILL / path).read_text()
-                            self.assertIn(f"State: {state}.", text)
-                            if folder == "playbooks":
-                                self.assertRegex(text, r"(?m)^1\. ", "A playbook needs executable steps")
+                        if path == "SKILL.md":
+                            self.assertEqual(name, "/eng-mode coordination")
+                            continue
+                        self.assertEqual(path, f"{folder}/{slug(name)}.md")
+                        text = (SKILL / path).read_text()
+                        self.assertIn(f"State: {state}.", text)
+                        if folder == "playbooks":
+                            self.assertRegex(text, r"(?m)^1\. ", "A playbook needs executable steps")
 
     def test_every_playbook_and_skill_file_is_charted(self):
         for folder, column in (("playbooks", 1), ("skills", 2)):
@@ -167,14 +187,52 @@ class PackageTests(unittest.TestCase):
                        for name in entry[column] if name != "/eng-mode coordination"]
             files = sorted(str(path.relative_to(SKILL)) for path in (SKILL / folder).glob("*.md"))
             self.assertEqual(sorted(charted), files)
+        self.assertEqual([path.name for path in (SKILL / "templates").glob("*.md")], ["task-record.md"])
+        self.assertFalse((SKILL / "playbooks" / "eng-mode-coordination.md").exists())
 
     def test_node_sections_follow_the_flowchart(self):
-        headings = re.findall(r"(?m)^### (.+)$", SKILL_TEXT.split("## Nodes", 1)[1].split("\n## ", 1)[0])
-        nodes = {label for source, _, target in FLOWCHART for label in (source, target)}
-        self.assertEqual(sorted(headings), sorted(nodes))
+        sections = node_sections()
+        self.assertEqual(set(sections), NODES)
         for source, edge, target in FLOWCHART:
-            if edge is not None:
-                self.assertIn(f"- `{edge}` → `{target}`", SKILL_TEXT)
+            text = sections[source]
+            outgoing = [item for item in FLOWCHART if item[0] == source]
+            with self.subTest(source=source, edge=edge, target=target):
+                if len(outgoing) == 1 and edge is None:
+                    self.assertIn(f"Next: `{target}`.", text)
+                elif edge is not None:
+                    self.assertIn(f"- `{edge}` \u2192 `{target}`", text)
+                else:
+                    self.assertIn(f"\u2192 `{target}`", text)
+        for source, text in sections.items():
+            found = re.findall(r"(?:Next: |\u2192 )`([^`]+)`", text)
+            expected = [target for src, _, target in FLOWCHART if src == source]
+            self.assertCountEqual(found, expected, source)
+
+    def test_playbooks_stay_on_their_nodes(self):
+        for path in sorted((SKILL / "playbooks").glob("*.md")):
+            text = path.read_text()
+            state, nodes = declared_playbook(text)
+            with self.subTest(playbook=path.name):
+                self.assertNotIn("## Next", text)
+                self.assertNotIn("\u2192", text)
+                self.assertNotRegex(text, r"(?m)^Next:")
+                self.assertNotIn("../playbooks/", text)
+                for node in nodes:
+                    self.assertIn(node, NODES)
+                    self.assertIn(node, STATES[state][0])
+                self.assertIn(f"(playbooks/{path.name})", SKILL_TEXT)
+
+    def test_skills_are_read_from_a_playbook_for_their_state(self):
+        skill_state = {skill: state for state, (_, _, skills) in STATES.items() for skill in skills}
+        for skill in skill_state:
+            referrers = [path for path in (SKILL / "playbooks").glob("*.md")
+                         if f"../skills/{slug(skill)}.md" in path.read_text()]
+            with self.subTest(skill=skill):
+                self.assertTrue(referrers, "A state's skill must be read from a playbook")
+                self.assertNotIn("Playbook:", (SKILL / "skills" / f"{slug(skill)}.md").read_text())
+                state_nodes = set(STATES[skill_state[skill]][0])
+                self.assertTrue(any(set(declared_playbook(path.read_text())[1]) & state_nodes
+                                     for path in referrers))
 
     def test_package_resources(self):
         manifest = json.loads((ROOT / "package.json").read_text())

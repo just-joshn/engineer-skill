@@ -2,8 +2,8 @@
 
 State: Plan. Node: `Goal, constraints, and acceptance checks`.
 
-1. Choose where the task record lives. For a small task, keep it in working context. For multi-step or delegated work, copy [the task record](../templates/task-record.md) into an untracked, task-specific working file. Do not overwrite an existing record or commit working notes unless requested.
-2. Break the work into units that each end in a check. Order them so each verified unit supports the next.
-3. Name the owner of the whole result. That owner is you. Mark the units a worker could take once boundaries are stable.
-4. Update the record's current node at each transition. Preserve the record before a handoff or context reset.
-5. On long tasks, report progress at meaningful milestones. Name the last verified result, the current node, and any blocker. Do not replace execution with status messages.
+1. Size the work to the smallest complete change. Read [scoping](../skills/scoping.md).
+2. For a small change, keep the plan in the working context. Do not create a planning document.
+3. For multi-step or delegated work, copy [the task record](../templates/task-record.md) to an untracked file. Record the goal, the constraints, the endpoint, and the acceptance checks there. Do not commit that file.
+4. Break the work into units that each end in a check. Order the units so a verified unit is the base for the next unit.
+5. You own the whole result. Mark a unit for a worker only after its boundary is stable.

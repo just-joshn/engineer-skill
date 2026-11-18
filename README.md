@@ -2,7 +2,7 @@
 
 Engineering mode is an opinionated, instruction-driven engineering workflow for any agent harness that can read instructions. Its canonical entry point is `eng-mode/SKILL.md`. `/eng-mode` is a convenience command where the host supports it.
 
-You supply the desired result and constraints. The agent takes responsibility for choosing and carrying out the engineering work. It follows one flowchart across six states: Plan, Design, Build, Test, Deploy, and Maintain. Each state names its playbooks and skills.
+You supply the desired result and constraints. `eng-mode/SKILL.md` is the coordination playbook. It walks one flowchart across six states: Plan, Design, Build, Test, Deploy, and Maintain. At each node it runs that node's playbooks and applies that state's skills. Playbooks are the steps. Skills are the rules you read before you apply them.
 
 ```text
 Goal, constraints, and acceptance checks
@@ -14,7 +14,7 @@ Goal, constraints, and acceptance checks
       Verified                → Authorized endpoint
           Handoff             → Deliver artifact and evidence
           Merge               → Meet independent shipping gates
-              (all gates pass)    → Merge and confirm actual state
+                                  → Merge and confirm actual state
               Gate cannot be met  → Report limits and remaining work
       Blocked or inconclusive → Report limits and remaining work
 ```
@@ -25,7 +25,7 @@ The coordinating agent owns the whole result, including work produced by other a
 
 The workflow prefers small, complete changes, explicit boundaries, root-cause fixes, and behavior checks. It rejects speculative abstractions, shared concurrent writes, unsupported success claims, and delivery beyond the user's authority.
 
-Small tasks use a short path. Independent work can run in parallel. Uncertainty calls for investigation rather than a larger implementation plan.
+Every task walks the same nodes. The evidence picks the exit. A small task still walks every node, and the work inside a node stays small.
 
 ## Explicit evidence
 
@@ -37,7 +37,7 @@ A merge requires independent shipping gates and confirmation of the actual remot
 
 ## Scope and limits
 
-The standalone `eng-mode/` directory uses the Agent Skills format. It contains the flowchart, its six states, their playbooks and skills, and a task-record template. `scripts/test_package.py` checks the skill against a transcription of the flowchart. It has no runtime dependency on Node, Pi, a model provider, or a particular worker tool.
+The standalone `eng-mode/` directory uses the Agent Skills format. It contains the coordination playbook, the six states, their playbooks and skills, and a task-record template. `scripts/test_package.py` checks that text against a transcription of the flowchart. It has no runtime dependency on Node, Pi, a model provider, or a particular worker tool.
 
 Use the same directory with Claude Code CLI, Codex CLI, Pi, OpenCode, or another compatible host. An agent without native skill discovery can read `eng-mode/SKILL.md` directly. Native installation and command syntax remain host-specific.
 

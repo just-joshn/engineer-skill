@@ -2,9 +2,9 @@
 
 State: Build. Node: `Implement and clean`.
 
-1. Follow existing conventions, callers, and checks.
-2. For a bug, add a regression check that fails on the unchanged artifact before you fix it. Explain any reproduction limit.
-3. Build the artifact one unit at a time. Verify each unit before building on it. Apply coding.
-4. For a structural change that must preserve behavior, apply refactoring.
-5. Delegate independent units only after their boundaries are stable. Apply delegation. Integrate worker output as the owner.
-6. For an answer-only task, write the answer with its evidence and make no source edits. For a review-only task, make no edits.
+1. Follow the surrounding conventions, callers, and checks. Read [coding](../skills/coding.md).
+2. For a bug, keep a regression check that already failed on the unchanged artifact. If that check is not in the suite yet, add it without changing the recorded failure. Change the code so the check passes. Do not weaken the check.
+3. Build one unit at a time. Check that unit before you build on it.
+4. For a structural change that must keep its behavior, capture the baseline before you restructure. Read [refactoring](../skills/refactoring.md).
+5. Delegate an independent unit only when the host has workers and the boundary is stable. Read [delegation](../skills/delegation.md). You integrate the worker's output.
+6. For an answer-only task, write the answer and its evidence. Do not edit source. For a review-only task, do not edit anything.

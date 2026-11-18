@@ -19,7 +19,7 @@ Use a task-specific working file for multi-step work. Replace the placeholders. 
 
 - Playbooks chosen at `Choose playbook; investigate and design`:
 - Overall owner:
-- Skills applied and the decisions they changed:
+- Skills read:
 - Units, dependencies, and checks:
 - Delegated contracts and allowed outputs:
 
