@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "private": true,
-  "description": "An opinionated engineering workflow with structured ownership and explicit evidence.",
+  "description": "A six-state engineering flowchart (Plan, Design, Build, Test, Deploy, Maintain) with structured ownership and explicit evidence.",
   "license": "MIT",
   "keywords": ["pi-package", "agent-skill", "engineering"],
   "peerDependencies": {

@@ -17,7 +17,7 @@ This method does not need native skill discovery, a slash command, a package man
 
 ## Install for native discovery
 
-Copy the entire `eng-mode/` directory into your host's supported skill directory. Keep the playbooks, references, and template with `SKILL.md`.
+Copy the entire `eng-mode/` directory into your host's supported skill directory. Keep the playbooks, skills, and template with `SKILL.md`.
 
 Alternatively, use the [Skills installer](https://github.com/vercel-labs/skills) from the target project, not this source repository:
 

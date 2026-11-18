@@ -9,7 +9,7 @@ python3 -m unittest discover -s scripts -p 'test_*.py' -v
 node --test scripts/test_command.ts
 ```
 
-The Python tests check frontmatter, local links, playbook routes, package resources, and scenario definitions. Skill frontmatter uses double-quoted string values with JSON-compatible escapes, a restricted YAML subset. Unsupported syntax fails validation instead of receiving a partial parse.
+The Python tests check frontmatter, local links, package resources, and scenario definitions. They also compare the skill's flowchart, state table, node sections, playbooks, and skills against a transcription of the Six-State Engineering Flowchart. Skill frontmatter uses double-quoted string values with JSON-compatible escapes, a restricted YAML subset. Unsupported syntax fails validation instead of receiving a partial parse.
 
 The Node tests check lossless command routing. Run them with Node 24 or newer. These tests do not grade model behavior.
 

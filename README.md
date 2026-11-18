@@ -2,7 +2,22 @@
 
 Engineering mode is an opinionated, instruction-driven engineering workflow for any agent harness that can read instructions. Its canonical entry point is `eng-mode/SKILL.md`. `/eng-mode` is a convenience command where the host supports it.
 
-You supply the desired result and constraints. The agent takes responsibility for choosing and carrying out the engineering work. It establishes acceptance checks, selects a playbook, applies relevant principles, delegates bounded work, verifies the outcome, and reports evidence.
+You supply the desired result and constraints. The agent takes responsibility for choosing and carrying out the engineering work. It follows one flowchart across six states: Plan, Design, Build, Test, Deploy, and Maintain. Each state names its playbooks and skills.
+
+```text
+Goal, constraints, and acceptance checks
+  → Choose playbook; investigate and design
+  → Implement and clean
+  → Verify actual behavior
+  → Evidence
+      Correctable failure     → Choose playbook; investigate and design
+      Verified                → Authorized endpoint
+          Handoff             → Deliver artifact and evidence
+          Merge               → Meet independent shipping gates
+              (all gates pass)    → Merge and confirm actual state
+              Gate cannot be met  → Report limits and remaining work
+      Blocked or inconclusive → Report limits and remaining work
+```
 
 ## Structured ownership
 
@@ -16,13 +31,13 @@ Small tasks use a short path. Independent work can run in parallel. Uncertainty 
 
 The workflow separates creating an artifact from demonstrating that it meets the goal.
 
-A correctable failure returns the agent to investigation and method selection. A blocked or inconclusive result requires a report of limits and remaining work. A verified result proceeds only to the authorized endpoint.
+A correctable failure returns the agent to `Choose playbook; investigate and design`. A blocked or inconclusive result ends at `Report limits and remaining work`. A verified result proceeds only to the authorized endpoint. Without merge authority, that endpoint is a handoff.
 
-A merge requires separate shipping gates and confirmation of the actual remote state. Passing local checks does not authorize a merge.
+A merge requires independent shipping gates and confirmation of the actual remote state. Passing local checks does not authorize a merge. A gate that cannot be met ends at `Report limits and remaining work`.
 
 ## Scope and limits
 
-The standalone `eng-mode/` directory uses the Agent Skills format. It contains the complete workflow, principles, playbooks, delegation contract, and task-record template. It has no runtime dependency on Node, Pi, a model provider, or a particular worker tool.
+The standalone `eng-mode/` directory uses the Agent Skills format. It contains the flowchart, its six states, their playbooks and skills, and a task-record template. `scripts/test_package.py` checks the skill against a transcription of the flowchart. It has no runtime dependency on Node, Pi, a model provider, or a particular worker tool.
 
 Use the same directory with Claude Code CLI, Codex CLI, Pi, OpenCode, or another compatible host. An agent without native skill discovery can read `eng-mode/SKILL.md` directly. Native installation and command syntax remain host-specific.
 
@@ -31,6 +46,6 @@ The repository also contains an optional Pi adapter. It preserves multiline requ
 These instructions do not add tools, enforce permissions in code, or guarantee model compliance. The intended benefit is a working discipline, not a measured productivity claim.
 
 - [Install and use engineering mode](docs/usage.md).
-- [Read the workflow and engineering principles](eng-mode/SKILL.md).
+- [Read the flowchart, states, playbooks, and skills](eng-mode/SKILL.md).
 - [Use the optional Pi adapter](docs/pi.md).
 - [Run validation and behavior scenarios](evals/README.md).
